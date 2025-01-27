@@ -9,8 +9,6 @@
    ```bash
    docker build -t restwallet
    docker-compose up -d
-   
-Сервер будет запущен на http://localhost:3000.
 
 ### Создание кошелька
 ```bash
