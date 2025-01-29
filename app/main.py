@@ -1,6 +1,5 @@
 from redis import Redis
 from fastapi import FastAPI, HTTPException, Depends
-from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from .database import get_db
@@ -10,7 +9,6 @@ from .config import settings
 
 app = FastAPI()
 
-# Используем переменные окружения для подключения к Redis
 redis = Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=0)
 
 @app.post("/api/v1/wallets/{wallet_uuid}/operation")
