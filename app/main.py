@@ -12,7 +12,8 @@ app = FastAPI()
 redis = Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=0)
 
 @app.post("/api/v1/wallets/{wallet_uuid}/operation")
-async def perform_operation(wallet_uuid: str, operation: OperationRequest, db: AsyncSession = Depends(get_db)):
+async def perform_operation(wallet_uuid: str, operation: OperationRequest,
+                            db: AsyncSession = Depends(get_db)):
     async with db.begin():
         wallet = await db.execute(select(Wallet).filter(Wallet.uuid == wallet_uuid).with_for_update())
         wallet = wallet.scalars().first()
@@ -32,10 +33,6 @@ async def perform_operation(wallet_uuid: str, operation: OperationRequest, db: A
         redis.set(wallet_uuid, wallet.balance)
         return {"message": "Operation successful"}
 
-#{
-#  "operationType": "WITHDRAW",
-#  "amount": 500
-#}
 
 @app.post("/api/v1/wallets")
 async def create_wallet(wallet: WalletCreateRequest, db: AsyncSession = Depends(get_db)):
@@ -54,10 +51,6 @@ async def create_wallet(wallet: WalletCreateRequest, db: AsyncSession = Depends(
         redis.set(wallet.uuid, new_wallet.balance)
         return {"message": "Wallet created successfully", "wallet": new_wallet}
 
-#{
-#  "uuid": "wallet_3",
-#  "balance": 100.0
-#}
 
 @app.get("/api/v1/wallets/{wallet_uuid}", response_model=WalletResponse)
 async def get_wallet(wallet_uuid: str, db: AsyncSession = Depends(get_db)):

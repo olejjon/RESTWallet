@@ -19,7 +19,7 @@ services:
     ports:
       - "6379:6379"
 
-  liquibase:
+  liquibase:pip install ruff
     image: liquibase/liquibase
     env_file:
       - .env
